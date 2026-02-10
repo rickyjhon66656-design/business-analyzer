@@ -27,30 +27,32 @@
 
         body {
             font-family: 'DM Sans', sans-serif;
-            background: linear-gradient(135deg, #000000 0%, #1a1a1a 100%);
+            background: #000000;
             color: var(--text);
             min-height: 100vh;
             padding: 2rem 1rem;
             position: relative;
             overflow-x: hidden;
+            perspective: 1500px;
         }
 
         body::before {
             content: '';
             position: fixed;
-            top: -50%;
-            right: -50%;
+            top: 0;
+            left: 0;
             width: 100%;
             height: 100%;
-            background: radial-gradient(circle, rgba(127,104,11,0.15) 0%, transparent 70%);
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(127,104,11,0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(157,130,16,0.1) 0%, transparent 50%);
             pointer-events: none;
-            animation: float 20s ease-in-out infinite;
+            animation: gradientShift 15s ease-in-out infinite;
         }
 
-        @keyframes float {
-            0%, 100% { transform: translate(0, 0) rotate(0deg); }
-            33% { transform: translate(30px, -30px) rotate(120deg); }
-            66% { transform: translate(-20px, 20px) rotate(240deg); }
+        @keyframes gradientShift {
+            0%, 100% { opacity: 1; transform: translateY(0); }
+            50% { opacity: 0.7; transform: translateY(-20px); }
         }
 
         .container {
@@ -64,16 +66,17 @@
             text-align: center;
             margin-bottom: 3rem;
             animation: fadeInDown 0.8s ease-out;
+            transform-style: preserve-3d;
         }
 
         @keyframes fadeInDown {
             from {
                 opacity: 0;
-                transform: translateY(-20px);
+                transform: translateY(-40px) translateZ(-50px) rotateX(10deg);
             }
             to {
                 opacity: 1;
-                transform: translateY(0);
+                transform: translateY(0) translateZ(0) rotateX(0deg);
             }
         }
 
@@ -87,32 +90,50 @@
             -webkit-text-fill-color: transparent;
             background-clip: text;
             letter-spacing: -0.02em;
+            filter: drop-shadow(0 10px 20px rgba(127,104,11,0.4));
+            transform: translateZ(30px);
         }
 
         .subtitle {
             color: var(--text-muted);
             font-size: 1.1rem;
             font-weight: 400;
+            transform: translateZ(20px);
         }
 
         .input-section {
-            background: rgba(26, 26, 26, 0.8);
-            backdrop-filter: blur(10px);
+            background: linear-gradient(145deg, rgba(26, 26, 26, 0.9), rgba(20, 20, 20, 0.9));
+            backdrop-filter: blur(20px);
             border: 1px solid var(--border);
-            border-radius: 16px;
+            border-radius: 20px;
             padding: 2rem;
             margin-bottom: 2rem;
             animation: fadeInUp 0.8s ease-out 0.2s backwards;
+            transform-style: preserve-3d;
+            box-shadow: 
+                0 25px 70px rgba(0,0,0,0.6),
+                0 10px 20px rgba(0,0,0,0.4),
+                inset 0 1px 0 rgba(127,104,11,0.15),
+                inset 0 -1px 0 rgba(0,0,0,0.5);
+            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        .input-section:hover {
+            transform: translateY(-10px) rotateX(3deg) scale(1.01);
+            box-shadow: 
+                0 35px 90px rgba(0,0,0,0.7),
+                0 15px 30px rgba(127,104,11,0.3),
+                inset 0 1px 0 rgba(127,104,11,0.2);
         }
 
         @keyframes fadeInUp {
             from {
                 opacity: 0;
-                transform: translateY(20px);
+                transform: translateY(50px) translateZ(-40px) rotateX(-5deg);
             }
             to {
                 opacity: 1;
-                transform: translateY(0);
+                transform: translateY(0) translateZ(0) rotateX(0deg);
             }
         }
 
@@ -130,20 +151,27 @@
             width: 100%;
             min-height: 150px;
             padding: 1rem;
-            background: var(--secondary);
+            background: linear-gradient(145deg, #1a1a1a, #141414);
             border: 2px solid var(--border);
-            border-radius: 12px;
+            border-radius: 14px;
             color: var(--text);
             font-family: 'DM Sans', sans-serif;
             font-size: 1rem;
             resize: vertical;
-            transition: all 0.3s ease;
+            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+            box-shadow: 
+                inset 0 3px 15px rgba(0,0,0,0.4),
+                inset 0 1px 3px rgba(0,0,0,0.6);
         }
 
         textarea:focus {
             outline: none;
             border-color: var(--accent);
-            box-shadow: 0 0 0 4px rgba(255, 107, 53, 0.1);
+            box-shadow: 
+                0 0 0 5px rgba(127, 104, 11, 0.15),
+                0 5px 20px rgba(127,104,11,0.3),
+                inset 0 3px 15px rgba(0,0,0,0.3);
+            transform: translateZ(15px) scale(1.01);
         }
 
         textarea::placeholder {
@@ -152,20 +180,25 @@
 
         button {
             width: 100%;
-            padding: 1.25rem 2rem;
+            padding: 1.4rem 2rem;
             background: linear-gradient(135deg, var(--accent) 0%, var(--accent-soft) 100%);
             border: none;
-            border-radius: 12px;
+            border-radius: 14px;
             color: white;
             font-family: 'DM Sans', sans-serif;
             font-size: 1.1rem;
             font-weight: 700;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
             text-transform: uppercase;
             letter-spacing: 0.05em;
             position: relative;
             overflow: hidden;
+            box-shadow: 
+                0 12px 35px rgba(127,104,11,0.4),
+                0 5px 15px rgba(127,104,11,0.3),
+                inset 0 2px 0 rgba(255,255,255,0.15),
+                inset 0 -2px 0 rgba(0,0,0,0.2);
         }
 
         button::before {
@@ -175,8 +208,8 @@
             left: -100%;
             width: 100%;
             height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-            transition: left 0.5s ease;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.6s ease;
         }
 
         button:hover::before {
@@ -184,12 +217,15 @@
         }
 
         button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(127, 104, 11, 0.4);
+            transform: translateY(-5px) translateZ(25px) scale(1.02);
+            box-shadow: 
+                0 20px 50px rgba(127, 104, 11, 0.5),
+                0 10px 25px rgba(127,104,11,0.4),
+                inset 0 2px 0 rgba(255,255,255,0.2);
         }
 
         button:active {
-            transform: translateY(0);
+            transform: translateY(-2px) translateZ(15px) scale(0.98);
         }
 
         button:disabled {
@@ -201,7 +237,7 @@
         .loading {
             display: none;
             text-align: center;
-            padding: 2rem;
+            padding: 3rem;
             animation: fadeInUp 0.5s ease-out;
         }
 
@@ -210,13 +246,16 @@
         }
 
         .spinner {
-            width: 50px;
-            height: 50px;
-            border: 4px solid var(--border);
+            width: 60px;
+            height: 60px;
+            border: 5px solid var(--border);
             border-top-color: var(--accent);
             border-radius: 50%;
             animation: spin 1s linear infinite;
-            margin: 0 auto 1rem;
+            margin: 0 auto 1.5rem;
+            box-shadow: 
+                0 8px 25px rgba(127,104,11,0.4),
+                inset 0 2px 10px rgba(0,0,0,0.3);
         }
 
         @keyframes spin {
@@ -225,7 +264,6 @@
 
         .results {
             display: none;
-            animation: fadeInUp 0.8s ease-out;
         }
 
         .results.active {
@@ -233,37 +271,71 @@
         }
 
         .overall-grade {
-            background: linear-gradient(135deg, rgba(127,104,11,0.15) 0%, rgba(157,130,16,0.1) 100%);
+            background: linear-gradient(145deg, rgba(127,104,11,0.18), rgba(157,130,16,0.12));
             border: 2px solid var(--accent);
-            border-radius: 16px;
-            padding: 2rem;
+            border-radius: 20px;
+            padding: 2.5rem;
             margin-bottom: 2rem;
             text-align: center;
+            transform-style: preserve-3d;
+            animation: scaleIn 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            box-shadow: 
+                0 25px 70px rgba(0,0,0,0.5),
+                0 10px 30px rgba(127,104,11,0.3),
+                inset 0 2px 0 rgba(127,104,11,0.25),
+                inset 0 -2px 10px rgba(0,0,0,0.3);
+            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        .overall-grade:hover {
+            transform: translateY(-10px) rotateX(5deg) scale(1.02);
+            box-shadow: 
+                0 35px 90px rgba(0,0,0,0.6),
+                0 15px 40px rgba(127,104,11,0.4),
+                inset 0 2px 0 rgba(127,104,11,0.3);
         }
 
         .overall-grade h2 {
             font-family: 'Instrument Serif', serif;
-            font-size: 1.5rem;
-            margin-bottom: 1rem;
+            font-size: 1.6rem;
+            margin-bottom: 1.5rem;
             font-weight: 400;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
         }
 
         .grade-display {
-            font-size: 5rem;
+            font-size: 6rem;
             font-weight: 700;
             font-family: 'Instrument Serif', serif;
-            margin: 1rem 0;
-            animation: scaleIn 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            margin: 1.5rem 0;
+            animation: gradeAppear 1s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            filter: drop-shadow(0 15px 50px currentColor);
+            transform: translateZ(50px);
         }
 
         @keyframes scaleIn {
             from {
                 opacity: 0;
-                transform: scale(0.5);
+                transform: scale(0.7) translateZ(-50px) rotateX(-10deg);
             }
             to {
                 opacity: 1;
-                transform: scale(1);
+                transform: scale(1) translateZ(0) rotateX(0deg);
+            }
+        }
+
+        @keyframes gradeAppear {
+            0% {
+                opacity: 0;
+                transform: scale(0.3) translateZ(0) rotateY(-180deg);
+            }
+            60% {
+                transform: scale(1.1) translateZ(50px) rotateY(10deg);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1) translateZ(50px) rotateY(0deg);
             }
         }
 
@@ -274,14 +346,31 @@
         .grade-F { color: #ff4444; }
 
         .category {
-            background: rgba(26, 26, 26, 0.8);
-            backdrop-filter: blur(10px);
+            background: linear-gradient(145deg, rgba(26, 26, 26, 0.95), rgba(18, 18, 18, 0.95));
+            backdrop-filter: blur(20px);
             border: 1px solid var(--border);
-            border-radius: 16px;
+            border-radius: 18px;
             padding: 2rem;
-            margin-bottom: 1.5rem;
-            transition: all 0.3s ease;
-            animation: fadeInUp 0.8s ease-out backwards;
+            margin-bottom: 1.8rem;
+            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+            animation: categorySlideIn 0.8s cubic-bezier(0.23, 1, 0.32, 1) backwards;
+            transform-style: preserve-3d;
+            box-shadow: 
+                0 15px 40px rgba(0,0,0,0.4),
+                0 5px 15px rgba(0,0,0,0.3),
+                inset 0 1px 0 rgba(127,104,11,0.08),
+                inset 0 -1px 0 rgba(0,0,0,0.4);
+        }
+
+        @keyframes categorySlideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-50px) translateZ(-30px) rotateY(-10deg);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0) translateZ(0) rotateY(0deg);
+            }
         }
 
         .category:nth-child(1) { animation-delay: 0.1s; }
@@ -293,50 +382,70 @@
 
         .category:hover {
             border-color: var(--accent);
-            transform: translateY(-4px);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            transform: translateY(-12px) rotateX(3deg) translateZ(20px) scale(1.01);
+            box-shadow: 
+                0 25px 60px rgba(0,0,0,0.5),
+                0 10px 25px rgba(127,104,11,0.3),
+                0 0 30px rgba(127,104,11,0.2),
+                inset 0 1px 0 rgba(127,104,11,0.15);
         }
 
         .category-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 1rem;
-            padding-bottom: 1rem;
-            border-bottom: 1px solid var(--border);
+            margin-bottom: 1.2rem;
+            padding-bottom: 1.2rem;
+            border-bottom: 2px solid var(--border);
         }
 
         .category-title {
             font-family: 'Instrument Serif', serif;
-            font-size: 1.5rem;
+            font-size: 1.6rem;
             font-weight: 400;
         }
 
         .category-grade {
-            font-size: 2rem;
+            font-size: 2.5rem;
             font-weight: 700;
             font-family: 'Instrument Serif', serif;
+            filter: drop-shadow(0 8px 25px currentColor);
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
         }
 
         .category-analysis {
-            color: var(--text-muted);
-            line-height: 1.7;
-            margin-bottom: 1.5rem;
+            color: var(--text);
+            line-height: 1.9;
+            margin-bottom: 1.8rem;
+            background: linear-gradient(135deg, rgba(127,104,11,0.05), rgba(157,130,16,0.03));
+            padding: 1.3rem;
+            border-radius: 10px;
+            border-left: 4px solid var(--accent);
+            box-shadow: inset 0 2px 10px rgba(0,0,0,0.15);
         }
 
         .improvements {
-            background: rgba(127, 104, 11, 0.1);
-            border-left: 3px solid var(--success);
-            padding: 1rem 1.5rem;
-            border-radius: 8px;
+            background: linear-gradient(145deg, rgba(127, 104, 11, 0.12), rgba(127, 104, 11, 0.08));
+            border-left: 4px solid var(--success);
+            padding: 1.3rem 1.7rem;
+            border-radius: 10px;
+            box-shadow: 
+                inset 0 3px 15px rgba(0,0,0,0.25),
+                inset 0 1px 0 rgba(127,104,11,0.1);
         }
 
         .improvements h4 {
             color: var(--success);
-            margin-bottom: 0.75rem;
-            font-size: 0.95rem;
+            margin-bottom: 1rem;
+            font-size: 1rem;
             text-transform: uppercase;
-            letter-spacing: 0.05em;
+            letter-spacing: 0.08em;
+            filter: drop-shadow(0 2px 5px rgba(127,104,11,0.3));
         }
 
         .improvements ul {
@@ -345,10 +454,17 @@
         }
 
         .improvements li {
-            padding-left: 1.5rem;
-            margin-bottom: 0.5rem;
+            padding-left: 1.8rem;
+            margin-bottom: 0.8rem;
             position: relative;
             color: var(--text);
+            line-height: 1.7;
+            transition: all 0.3s ease;
+        }
+
+        .improvements li:hover {
+            transform: translateX(5px);
+            color: var(--accent-soft);
         }
 
         .improvements li::before {
@@ -357,197 +473,24 @@
             left: 0;
             color: var(--success);
             font-weight: 700;
-        }
-
-        .view-details-btn {
-            display: inline-block;
-            margin-top: 1rem;
-            padding: 0.75rem 1.5rem;
-            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-soft) 100%);
-            border: none;
-            border-radius: 8px;
-            color: white;
-            font-family: 'DM Sans', sans-serif;
-            font-size: 0.9rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-        }
-
-        .view-details-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(127, 104, 11, 0.3);
-        }
-
-        .improvement-detail-page {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: #000000;
-            z-index: 1000;
-            overflow-y: auto;
-            animation: fadeIn 0.3s ease-out;
-        }
-
-        .improvement-detail-page.active {
-            display: block;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        .detail-header {
-            background: linear-gradient(135deg, rgba(127,104,11,0.2) 0%, rgba(157,130,16,0.1) 100%);
-            border-bottom: 2px solid var(--accent);
-            padding: 2rem;
-            position: sticky;
-            top: 0;
-            z-index: 10;
-            backdrop-filter: blur(10px);
-        }
-
-        .detail-header-content {
-            max-width: 900px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .back-btn {
-            padding: 0.75rem 1.5rem;
-            background: var(--secondary);
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            color: var(--text);
-            font-family: 'DM Sans', sans-serif;
-            font-size: 0.9rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .back-btn:hover {
-            background: var(--accent);
-            border-color: var(--accent);
-            transform: translateX(-3px);
-        }
-
-        .detail-content {
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 3rem 2rem;
-        }
-
-        .detail-section {
-            background: rgba(26, 26, 26, 0.8);
-            border: 1px solid var(--border);
-            border-radius: 16px;
-            padding: 2rem;
-            margin-bottom: 2rem;
-            animation: fadeInUp 0.5s ease-out backwards;
-        }
-
-        .detail-section:nth-child(1) { animation-delay: 0.1s; }
-        .detail-section:nth-child(2) { animation-delay: 0.2s; }
-        .detail-section:nth-child(3) { animation-delay: 0.3s; }
-        .detail-section:nth-child(4) { animation-delay: 0.4s; }
-        .detail-section:nth-child(5) { animation-delay: 0.5s; }
-        .detail-section:nth-child(6) { animation-delay: 0.6s; }
-
-        .detail-section-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1.5rem;
-            padding-bottom: 1rem;
-            border-bottom: 2px solid var(--border);
-        }
-
-        .detail-section-title {
-            font-family: 'Instrument Serif', serif;
-            font-size: 2rem;
-            font-weight: 400;
-        }
-
-        .detail-section-grade {
-            font-size: 2.5rem;
-            font-weight: 700;
-            font-family: 'Instrument Serif', serif;
-        }
-
-        .improvement-step {
-            background: rgba(127, 104, 11, 0.05);
-            border-left: 4px solid var(--accent);
-            padding: 1.5rem;
-            margin-bottom: 1.5rem;
-            border-radius: 8px;
-        }
-
-        .improvement-step h4 {
-            color: var(--accent);
-            font-size: 1.1rem;
-            margin-bottom: 0.75rem;
-            display: flex;
-            align-items: center;
-        }
-
-        .improvement-step h4::before {
-            content: '✓';
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            width: 28px;
-            height: 28px;
-            background: var(--accent);
-            color: #000;
-            border-radius: 50%;
-            margin-right: 0.75rem;
-            font-weight: 700;
-            font-size: 0.9rem;
-        }
-
-        .improvement-step p {
-            color: var(--text-muted);
-            line-height: 1.7;
+            filter: drop-shadow(0 2px 5px rgba(127,104,11,0.5));
         }
 
         @media (max-width: 768px) {
-            .detail-content {
-                padding: 2rem 1rem;
+            body {
+                perspective: 800px;
             }
 
-            .detail-section-title {
-                font-size: 1.5rem;
-            }
-
-            .detail-section-grade {
-                font-size: 2rem;
-            }
-        }
-
-        @media (max-width: 768px) {
             h1 {
                 font-size: 2.5rem;
             }
 
-            .subtitle {
-                font-size: 1rem;
-            }
-
-            .input-section {
-                padding: 1.5rem;
-            }
-
             .grade-display {
-                font-size: 4rem;
+                font-size: 4.5rem;
+            }
+
+            .category:hover {
+                transform: translateY(-8px) rotateX(2deg);
             }
         }
     </style>
@@ -556,14 +499,14 @@
     <div class="container">
         <header>
             <h1>Business Idea Analyzer</h1>
-            <p class="subtitle">AI-powered analysis to validate and improve your business concept</p>
+            <p class="subtitle">AI-powered 3D analysis to validate and improve your business concept</p>
         </header>
 
         <div class="input-section">
             <label for="businessIdea">Describe Your Business Idea</label>
             <textarea 
                 id="businessIdea" 
-                placeholder="Example: A mobile app that connects local farmers directly with restaurants, eliminating middlemen and ensuring fresh produce delivery within 24 hours..."
+                placeholder="Example: Vegan leather manufacturing using mushroom mycelium. We'll sell to fashion brands and automotive companies looking for sustainable alternatives to animal leather..."
             ></textarea>
             <button id="analyzeBtn" onclick="analyzeIdea()">Analyze My Idea</button>
         </div>
@@ -574,20 +517,9 @@
         </div>
 
         <div class="results" id="results"></div>
-
-        <div class="improvement-detail-page" id="improvementDetailPage">
-            <div class="detail-header">
-                <div class="detail-header-content">
-                    <h2 style="font-family: 'Instrument Serif', serif; font-size: 2rem; font-weight: 400;">Detailed Improvement Plan</h2>
-                    <button class="back-btn" onclick="closeDetailPage()">← Back to Analysis</button>
-                </div>
-            </div>
-            <div class="detail-content" id="detailContent"></div>
-        </div>
     </div>
 
     <script>
-        let currentAnalysis = null;
         async function analyzeIdea() {
             const idea = document.getElementById('businessIdea').value.trim();
             
@@ -605,12 +537,10 @@
             results.classList.remove('active');
             results.innerHTML = '';
 
-            // Simulate API delay for realistic feel
             await new Promise(resolve => setTimeout(resolve, 2000));
 
             try {
-                // Generate analysis based on the idea
-                const analysis = generateAnalysis(idea);
+                const analysis = analyzeBusinessIdea(idea);
                 displayResults(analysis);
             } catch (error) {
                 console.error('Error:', error);
@@ -629,181 +559,311 @@
             }
         }
 
-        function generateAnalysis(idea) {
-            // Analyze idea length and keywords for smart grading
-            const ideaLower = idea.toLowerCase();
+        function analyzeBusinessIdea(idea) {
             const wordCount = idea.split(/\s+/).length;
             
-            // Check for positive indicators
-            const hasMarket = ideaLower.includes('market') || ideaLower.includes('customer') || ideaLower.includes('demand');
-            const hasTech = ideaLower.includes('app') || ideaLower.includes('platform') || ideaLower.includes('software') || ideaLower.includes('ai');
-            const hasRevenue = ideaLower.includes('subscription') || ideaLower.includes('revenue') || ideaLower.includes('price') || ideaLower.includes('sell');
-            const hasScale = ideaLower.includes('scale') || ideaLower.includes('grow') || ideaLower.includes('expand');
-            const hasCompetition = ideaLower.includes('competitor') || ideaLower.includes('unique') || ideaLower.includes('different');
-            const isDetailed = wordCount > 20;
-            const isVeryDetailed = wordCount > 40;
+            // Extract key business elements from the ACTUAL idea
+            const hasApp = /\b(app|mobile|software|platform|website|saas|digital)\b/i.test(idea);
+            const hasEcommerce = /\b(sell|shop|store|marketplace|ecommerce|retail)\b/i.test(idea);
+            const hasSubscription = /\b(subscription|monthly|recurring|membership)\b/i.test(idea);
+            const hasManufacturing = /\b(manufactur|produc|make|build|create|fabricat)\b/i.test(idea);
+            const hasService = /\b(service|consult|agency|help|assist)\b/i.test(idea);
             
-            // Calculate grades based on indicators
-            const marketGrade = hasMarket && isDetailed ? 'A' : hasMarket ? 'B' : isDetailed ? 'C' : 'D';
-            const competitiveGrade = hasCompetition && hasTech ? 'A' : hasTech ? 'B' : hasCompetition ? 'C' : 'D';
-            const revenueGrade = hasRevenue && isDetailed ? 'A' : hasRevenue ? 'B' : 'C';
-            const feasibilityGrade = hasTech && isVeryDetailed ? 'B' : hasTech ? 'C' : isDetailed ? 'C' : 'D';
-            const scalabilityGrade = hasScale && hasTech ? 'A' : hasScale || hasTech ? 'B' : 'C';
-            const riskGrade = isVeryDetailed && hasMarket ? 'B' : isDetailed ? 'C' : 'D';
+            const hasCustomer = /\b(customer|client|user|buyer|consumer)\b/i.test(idea);
+            const hasProblem = /\b(problem|issue|pain|challenge|solve|solution)\b/i.test(idea);
+            const hasCompetitor = /\b(competitor|competition|unlike|different|unique|alternative)\b/i.test(idea);
+            const hasMetrics = /\b(\d+%|million|billion|\$\d|revenue|profit|margin|cost)\b/i.test(idea);
+            const hasMarket = /\b(market|industry|sector|demand|grow)\b/i.test(idea);
             
-            // Calculate overall grade
-            const grades = [marketGrade, competitiveGrade, revenueGrade, feasibilityGrade, scalabilityGrade, riskGrade];
-            const gradeValues = { 'A': 4, 'B': 3, 'C': 2, 'D': 1, 'F': 0 };
-            const avgValue = grades.reduce((sum, g) => sum + gradeValues[g], 0) / grades.length;
-            const overallGrade = avgValue >= 3.5 ? 'A' : avgValue >= 2.5 ? 'B' : avgValue >= 1.5 ? 'C' : avgValue >= 0.5 ? 'D' : 'F';
+            // Extract ACTUAL targets/customers from the idea (not hardcoded examples!)
+            const targets = extractActualTargets(idea);
+            const products = extractActualProducts(idea);
+            const businessType = getBusinessType(idea);
+            
+            // Calculate scores based on content
+            const detailScore = Math.min(wordCount / 50, 1);
+            const marketScore = (targets.length > 0 ? 0.35 : 0) + (hasProblem ? 0.30 : 0) + (hasCustomer ? 0.20 : 0) + (hasMarket ? 0.15 : 0);
+            const competitiveScore = (hasCompetitor ? 0.35 : 0) + ((hasApp || hasManufacturing) ? 0.35 : 0.15) + (detailScore * 0.30);
+            const revenueScore = (hasSubscription ? 0.45 : hasEcommerce || hasManufacturing ? 0.25 : 0.10) + (hasMetrics ? 0.30 : 0) + (detailScore * 0.25);
+            const feasibilityScore = (hasManufacturing ? 0.30 : hasApp ? 0.35 : 0.45) + (detailScore * 0.40) + (hasMetrics ? 0.15 : 0.10) + 0.05;
+            const scalabilityScore = ((hasApp || hasEcommerce) ? 0.45 : hasManufacturing ? 0.30 : 0.15) + (hasSubscription ? 0.30 : 0.10) + 0.15;
+            const riskScore = (hasMetrics ? 0.25 : 0) + (detailScore * 0.40) + ((hasCustomer && hasProblem) ? 0.25 : 0.05) + (hasCompetitor ? 0.10 : 0);
+            
+            const toGrade = (score) => {
+                if (score >= 0.80) return 'A';
+                if (score >= 0.65) return 'B';
+                if (score >= 0.45) return 'C';
+                if (score >= 0.25) return 'D';
+                return 'F';
+            };
+            
+            const marketGrade = toGrade(marketScore);
+            const competitiveGrade = toGrade(competitiveScore);
+            const revenueGrade = toGrade(revenueScore);
+            const feasibilityGrade = toGrade(feasibilityScore);
+            const scalabilityGrade = toGrade(scalabilityScore);
+            const riskGrade = toGrade(riskScore);
+            
+            const avgScore = (marketScore + competitiveScore + revenueScore + feasibilityScore + scalabilityScore + riskScore) / 6;
+            const overallGrade = toGrade(avgScore);
             
             return {
-                overallGrade: overallGrade,
+                overallGrade,
                 categories: [
                     {
                         name: "Market Opportunity",
                         grade: marketGrade,
-                        analysis: getMarketAnalysis(marketGrade, hasMarket, isDetailed, idea),
-                        improvements: [
-                            "Conduct in-depth customer discovery interviews with 20-30 potential users across different demographics. Use open-ended questions to understand their pain points, current solutions, willingness to pay, and decision-making process. Document all findings in a structured format.",
-                            "Perform comprehensive market sizing using both top-down (TAM/SAM/SOM framework) and bottom-up approaches. Research industry reports from sources like Gartner, McKinsey, and IBISWorld. Calculate your realistic market share based on competitive landscape and go-to-market strategy.",
-                            "Create 3-5 detailed buyer personas including demographics (age, income, location, job title), psychographics (values, motivations, fears), behavioral patterns (how they currently solve the problem), and buying triggers (what would make them switch to your solution).",
-                            "Analyze market trends and timing - is the market growing or shrinking? Are there regulatory changes, technological shifts, or cultural movements that make now the right time? Identify early adopter segments who have the highest pain and urgency.",
-                            "Map out the entire customer journey from awareness to purchase to retention. Identify all touchpoints, potential friction points, and opportunities to create value. Understand what channels your target customers use and trust."
-                        ]
+                        analysis: generateMarketAnalysis(idea, marketGrade, targets, hasCustomer, hasProblem, hasMarket, wordCount),
+                        improvements: generateMarketImprovements(idea, targets, hasProblem, businessType)
                     },
                     {
                         name: "Competitive Advantage",
                         grade: competitiveGrade,
-                        analysis: getCompetitiveAnalysis(competitiveGrade, hasCompetition, hasTech, idea),
-                        improvements: [
-                            "Conduct thorough competitive analysis of 5-10 direct and indirect competitors. Create a detailed comparison matrix covering features, pricing, target market, strengths, weaknesses, market share, and customer satisfaction. Identify gaps in their offerings.",
-                            "Develop a clear unique value proposition (UVP) that articulates exactly why customers should choose you over alternatives. Focus on outcomes, not features. Test your UVP with target customers to ensure it resonates and is perceived as meaningfully different.",
-                            "Build defensible moats such as proprietary technology, exclusive partnerships, network effects, brand reputation, or switching costs. Consider what would prevent a well-funded competitor from copying your idea in 6-12 months.",
-                            "Identify and leverage unfair advantages you possess - specialized expertise, unique access to customers or distribution, proprietary data, or existing relationships. These are advantages competitors can't easily replicate.",
-                            "Continuously innovate and stay ahead by establishing a product roadmap that keeps you 12-18 months ahead of competition. Build a culture of customer feedback and rapid iteration to maintain your edge."
-                        ]
+                        analysis: generateCompetitiveAnalysis(idea, competitiveGrade, hasCompetitor, businessType, products),
+                        improvements: generateCompetitiveImprovements(idea, businessType, hasCompetitor)
                     },
                     {
                         name: "Revenue Model",
                         grade: revenueGrade,
-                        analysis: getRevenueAnalysis(revenueGrade, hasRevenue, isDetailed, idea),
-                        improvements: [
-                            "Test multiple pricing models and strategies - consider subscription, freemium, usage-based, tiered pricing, enterprise licensing, marketplace commission, or hybrid models. Run pricing experiments with early customers to optimize for both conversion and revenue.",
-                            "Calculate detailed unit economics including Customer Acquisition Cost (CAC), Lifetime Value (LTV), gross margins, and payback period. Ensure LTV:CAC ratio is at least 3:1 and payback period is under 12 months for sustainable growth.",
-                            "Develop multiple revenue streams to reduce risk and increase value per customer. Consider core product sales, premium features, professional services, training, API access, white-label licensing, or complementary products.",
-                            "Create a financial model projecting 3-5 year revenue, costs, and profitability under different scenarios (conservative, realistic, optimistic). Include assumptions about pricing, conversion rates, churn, growth rate, and customer acquisition strategy.",
-                            "Research willingness-to-pay through customer interviews and competitive benchmarking. Understand the economic value you create for customers and price to capture a fair portion of that value. Consider value-based pricing rather than cost-plus."
-                        ]
+                        analysis: generateRevenueAnalysis(idea, revenueGrade, hasSubscription, hasMetrics, businessType),
+                        improvements: generateRevenueImprovements(idea, businessType, hasSubscription, hasMetrics)
                     },
                     {
                         name: "Feasibility",
                         grade: feasibilityGrade,
-                        analysis: getFeasibilityAnalysis(feasibilityGrade, hasTech, isDetailed, isVeryDetailed, idea),
-                        improvements: [
-                            "Break down your vision into a minimal viable product (MVP) that can be built in 3-6 months with limited resources. Focus on the core value proposition and cut everything else. Identify what you can launch with to start learning from real customers.",
-                            "Create a detailed resource plan identifying all required skills (technical, business, marketing), tools, infrastructure, partnerships, and capital. For each requirement, specify whether you'll build in-house, hire, outsource, or partner.",
-                            "Develop a realistic 12-month roadmap with specific milestones, deliverables, and success metrics. Include product development phases, customer acquisition goals, revenue targets, and key learning objectives. Build in buffer time for unexpected challenges.",
-                            "Identify and mitigate critical risks that could derail execution - technical challenges, regulatory hurdles, dependency on third parties, team gaps, or funding shortfalls. Create contingency plans for your top 5 risks.",
-                            "Start with a pilot program or beta test with 10-20 early customers to validate feasibility before full launch. Use this phase to refine the product, test operations, gather testimonials, and prove the business model works at small scale."
-                        ]
+                        analysis: generateFeasibilityAnalysis(idea, feasibilityGrade, businessType, wordCount),
+                        improvements: generateFeasibilityImprovements(idea, businessType)
                     },
                     {
                         name: "Scalability",
                         grade: scalabilityGrade,
-                        analysis: getScalabilityAnalysis(scalabilityGrade, hasScale, hasTech, idea),
-                        improvements: [
-                            "Design your technology, operations, and processes to handle 10x growth without fundamental rebuilding. Use cloud infrastructure, automation, and scalable architectures from day one. Avoid custom solutions that will break at scale.",
-                            "Identify scaling bottlenecks early - customer onboarding, support, content creation, manual processes, or key person dependencies. Create playbooks and systems to systematize these functions before they become constraints.",
-                            "Build strategic partnerships for distribution, technology, or operations that enable rapid scaling. Look for channels that give you access to large customer bases without proportional increases in your team or costs.",
-                            "Develop a hiring and team scaling plan that outlines roles needed at different growth stages. Create standard operating procedures and training programs so new team members can quickly become productive as you grow.",
-                            "Plan your go-to-market expansion strategy - will you scale geographically, by customer segment, or by product line? Sequence your expansion to learn and build momentum, starting with beachhead markets where you can dominate before expanding."
-                        ]
+                        analysis: generateScalabilityAnalysis(idea, scalabilityGrade, businessType, hasSubscription),
+                        improvements: generateScalabilityImprovements(idea, businessType)
                     },
                     {
                         name: "Risk Assessment",
                         grade: riskGrade,
-                        analysis: getRiskAnalysis(riskGrade, isDetailed, isVeryDetailed, hasMarket, idea),
-                        improvements: [
-                            "Create a comprehensive risk register identifying market risks (demand doesn't materialize, competitors respond aggressively), execution risks (product delays, team issues), financial risks (running out of cash), and external risks (regulatory changes, economic downturns). Rate each by likelihood and impact.",
-                            "Develop detailed contingency plans for your top 5 risks. For each risk, define early warning indicators, mitigation strategies, and response plans. Assign owners responsible for monitoring and responding to each risk category.",
-                            "Build financial resilience by maintaining 12-18 months of runway at all times. Diversify funding sources, manage burn rate carefully, and have backup plans if primary revenue channels underperform. Know your minimum viable revenue to keep operating.",
-                            "Avoid single points of failure in your business - don't depend on one customer for majority of revenue, one supplier for critical inputs, one team member for essential functions, or one channel for all customer acquisition. Build redundancy and optionality.",
-                            "Validate your riskiest assumptions early and cheaply before committing major resources. Use experiments, pilots, and prototypes to test whether customers will actually pay, if you can deliver at acceptable cost, and if unit economics work at scale."
-                        ]
+                        analysis: generateRiskAnalysis(idea, riskGrade, businessType, hasProblem, hasMetrics, wordCount),
+                        improvements: generateRiskImprovements(idea, businessType, hasProblem)
                     }
                 ]
             };
         }
 
-        function getMarketAnalysis(grade, hasMarket, isDetailed, idea) {
-            if (grade === 'A') {
-                return `<strong>Grade Reasoning:</strong> Your business idea demonstrates strong market awareness by clearly identifying target customers and market demand. You've articulated who will use this solution and why there's a need for it. The level of detail suggests you've thought about market dynamics. <strong>Why this matters:</strong> Ideas that clearly define their market and demonstrate understanding of customer needs are 3x more likely to achieve product-market fit. However, claiming there's demand is different from proving it - you'll need to validate with real customer conversations and data.`;
-            } else if (grade === 'B') {
-                return `<strong>Grade Reasoning:</strong> Your idea shows some market consideration, but lacks depth in articulating the specific target customer and their pain points. You mention market opportunity, but don't provide enough detail about market size, customer segments, or competitive dynamics. <strong>Why this matters:</strong> 42% of startups fail due to 'no market need' - not because the product is bad, but because they didn't truly understand their customer. You need to deeply understand who specifically will pay for this and why their need is urgent enough to change behavior.`;
-            } else if (grade === 'C') {
-                return `<strong>Grade Reasoning:</strong> Your business idea doesn't clearly identify the target market or demonstrate understanding of customer needs. While you may have a product vision, it's unclear who will buy this, why they need it, or how large the opportunity is. <strong>Why this matters:</strong> Without a well-defined market, you're building a solution in search of a problem. This is the #1 cause of startup failure. Before building anything, you need to identify a specific customer segment with a painful problem they're actively trying to solve and willing to pay for a better solution.`;
+        // Extract ACTUAL business elements from the idea
+        function extractActualTargets(idea) {
+            const targets = [];
+            const lowerIdea = idea.toLowerCase();
+            
+            // Look for specific customer mentions
+            if (/fashion brand|clothing|apparel|designer/i.test(idea)) targets.push('fashion brands');
+            if (/automotive|car|vehicle|auto/i.test(idea)) targets.push('automotive companies');
+            if (/restaurant|cafe|food service/i.test(idea)) targets.push('restaurants');
+            if (/farmer|agriculture|farm/i.test(idea)) targets.push('farmers');
+            if (/business|company|enterprise|b2b/i.test(idea)) targets.push('businesses');
+            if (/consumer|customer|people|individual|b2c/i.test(idea)) targets.push('consumers');
+            if (/student|education|school/i.test(idea)) targets.push('students');
+            if (/healthcare|hospital|medical|clinic/i.test(idea)) targets.push('healthcare providers');
+            if (/retail|store|shop/i.test(idea)) targets.push('retailers');
+            
+            return targets;
+        }
+
+        function extractActualProducts(idea) {
+            const products = [];
+            
+            if (/leather|hide|material/i.test(idea)) products.push('leather/materials');
+            if (/food|meal|dish/i.test(idea)) products.push('food products');
+            if (/app|software|platform/i.test(idea)) products.push('software/app');
+            if (/product|goods|item/i.test(idea)) products.push('physical products');
+            if (/service|consult/i.test(idea)) products.push('services');
+            
+            return products;
+        }
+
+        function getBusinessType(idea) {
+            if (/manufactur|produc|make|build|fabricat/i.test(idea)) return 'manufacturing';
+            if (/app|mobile|software|platform|saas/i.test(idea)) return 'software';
+            if (/ecommerce|sell|shop|store|retail/i.test(idea)) return 'ecommerce';
+            if (/service|consult|agency/i.test(idea)) return 'service';
+            return 'general';
+        }
+
+        // Generate CUSTOM analysis based on actual idea content
+        function generateMarketAnalysis(idea, grade, targets, hasCustomer, hasProblem, hasMarket, wordCount) {
+            const targetStr = targets.length > 0 ? targets.join(', ') : 'specific customers';
+            const snippet = idea.substring(0, 80) + (idea.length > 80 ? '...' : '');
+            
+            if (grade === 'A' || grade === 'B') {
+                return `<strong>Good market awareness.</strong> Your ${wordCount}-word idea "${snippet}" ${targets.length > 0 ? `identifies <strong>${targetStr}</strong> as target customers` : 'mentions potential customers'}. ${hasProblem ? '✓ Customer problem/need is addressed.' : '✗ Problem statement could be clearer.'} ${hasMarket ? '✓ Market awareness shown.' : ''} <strong>Grade ${grade}:</strong> ${targets.length > 1 ? 'Multiple customer segments identified - good' : 'Customer targeting present'}, but need deeper validation of demand.`;
             } else {
-                return `<strong>Grade Reasoning:</strong> Your idea lacks clear market definition and doesn't articulate customer needs or demand. It's a product concept without evidence of market opportunity. <strong>Critical Issue:</strong> You need to shift from product-thinking to market-thinking. Start by identifying a specific group of people with a painful, expensive problem they're actively trying to solve. Research their current solutions, willingness to pay, and what would make them switch. Market validation must come before product development.`;
+                return `<strong>Market needs definition.</strong> Your idea ${!targets.length ? "doesn't clearly specify WHO the customer is" : `mentions ${targetStr} but lacks detail`}. ${!hasProblem ? '✗ Customer problem/pain point is unclear.' : ''} ${!hasMarket ? '✗ No market size or demand discussion.' : ''} <strong>Grade ${grade}:</strong> Without clearly identifying a specific customer with an urgent, expensive problem, validating demand will be difficult.`;
             }
         }
 
-        function getCompetitiveAnalysis(grade, hasCompetition, hasTech, idea) {
-            if (grade === 'A') {
-                return `<strong>Grade Reasoning:</strong> Your idea articulates clear differentiation and leverages technology or unique approaches that could provide competitive advantages. You've thought about what makes this different from existing solutions. <strong>Why this matters:</strong> In competitive markets, clear differentiation is essential. However, be aware that competitors can copy features quickly. Your real competitive advantage will come from execution, customer relationships, brand, and compounding advantages like network effects or proprietary data.`;
-            } else if (grade === 'B') {
-                return `<strong>Grade Reasoning:</strong> Your idea has some differentiating factors, particularly if it leverages technology, but the competitive advantage isn't clearly articulated or defensible. <strong>Why this matters:</strong> Technology alone isn't a moat - competitors can copy it. You need to identify sustainable competitive advantages like network effects, switching costs, brand, proprietary data, or exclusive partnerships. Consider what will keep customers with you and prevent new entrants from winning market share.`;
-            } else if (grade === 'C') {
-                return `<strong>Grade Reasoning:</strong> Your business idea doesn't clearly articulate what makes it different from existing solutions or how you'll compete. This suggests you haven't thoroughly researched the competitive landscape or identified your unique value proposition. <strong>Critical Issue:</strong> Every market has competition, even if indirect. Customers are already solving this problem somehow - even if it's with spreadsheets or manual processes. You need to understand exactly why a customer would choose your solution over what they're doing today, and what makes your approach defensible over time.`;
+        function generateMarketImprovements(idea, targets, hasProblem, businessType) {
+            const improvements = [];
+            
+            if (targets.length === 0) {
+                improvements.push(`Define EXACTLY who your customer is. Instead of broad categories, get specific: If targeting businesses, what size? What industry? What geographic location? Example: "Mid-sized fashion brands (50-500 employees) in US/EU focused on sustainability" not just "fashion brands".`);
             } else {
-                return `<strong>Grade Reasoning:</strong> Your idea lacks any clear competitive differentiation or unique value proposition. Without understanding what makes you different, you'll struggle to acquire customers and may face commoditization. <strong>Critical Issue:</strong> You must thoroughly research all competitors (direct and indirect) and identify a defensible position. This could be serving a different customer segment, having superior technology, offering better service, or creating a different business model. Simply being 'better' or 'cheaper' is rarely enough.`;
+                improvements.push(`Research your identified targets (${targets.join(', ')}) in depth: How many exist? What's their annual budget for ${businessType === 'manufacturing' ? 'materials/suppliers' : businessType === 'software' ? 'software tools' : 'solutions like yours'}? Who makes buying decisions? What's their purchasing process?`);
+            }
+            
+            if (!hasProblem) {
+                improvements.push(`Identify the SPECIFIC problem you solve for ${targets.length ? targets[0] : 'your customers'}. Make it measurable: How much money/time do they lose due to this problem? What does it cost them annually? Quantify the pain.`);
+            } else {
+                improvements.push(`Validate the problem through customer interviews. Talk to 20-30 potential ${targets.length ? targets[0] : 'customers'}: How do they solve this today? What do they pay? What frustrates them about current solutions? Would they pay for yours?`);
+            }
+            
+            improvements.push(`Calculate realistic market size: TAM (Total Addressable Market - everyone who could buy), SAM (Serviceable Addressable Market - who you can reach), SOM (Serviceable Obtainable Market - realistic year-1 capture). Use industry reports + bottom-up customer counting.`);
+            
+            return improvements;
+        }
+
+        function generateCompetitiveAnalysis(idea, grade, hasCompetitor, businessType, products) {
+            const productStr = products.length > 0 ? products[0] : 'your offering';
+            
+            if (grade === 'A' || grade === 'B') {
+                return `<strong>Competitive awareness present.</strong> ${hasCompetitor ? '✓ You mention competitors or differentiation.' : ''} Your ${businessType} model for ${productStr} ${businessType === 'manufacturing' ? 'requires understanding material competitors and alternative suppliers' : businessType === 'software' ? 'faces competition from existing platforms' : 'competes in an established market'}. <strong>Grade ${grade}:</strong> ${hasCompetitor ? 'Understanding competition is good' : 'Need to identify alternatives'} - but what makes you defensibly better long-term?`;
+            } else {
+                return `<strong>No clear differentiation.</strong> ${!hasCompetitor ? '✗ No competitor analysis mentioned.' : ''} For ${productStr} in ${businessType}, customers already have ${businessType === 'manufacturing' ? 'existing suppliers' : businessType === 'software' ? 'current tools' : 'current solutions'}. <strong>Grade ${grade}:</strong> Without understanding what they use now and why yours is 10x better (not 10% better), customer acquisition will fail.`;
             }
         }
 
-        function getRevenueAnalysis(grade, hasRevenue, isDetailed, idea) {
-            if (grade === 'A') {
-                return `<strong>Grade Reasoning:</strong> Your idea includes consideration of monetization strategy and revenue generation, showing business model awareness. You've thought beyond just the product to how you'll make money. <strong>Why this matters:</strong> Having a revenue model is critical, but the real test is unit economics - will customer lifetime value exceed acquisition costs by at least 3x? You'll need to validate pricing, conversion rates, and retention through real customer interactions before scaling.`;
-            } else if (grade === 'B') {
-                return `<strong>Grade Reasoning:</strong> Your idea mentions revenue or monetization, but lacks detail on the business model, pricing strategy, or economic viability. <strong>Why this matters:</strong> Many businesses fail not because they can't get customers, but because they can't acquire them profitably or monetize them effectively. You need a clear path to profitability with validated pricing that customers will actually pay, not just what you hope they'll pay.`;
-            } else if (grade === 'C') {
-                return `<strong>Grade Reasoning:</strong> Your business idea doesn't articulate a clear revenue model or monetization strategy. It's unclear how you'll make money, what customers will pay, or whether the business can be profitable. <strong>Critical Issue:</strong> Revenue model should be designed from day one, not as an afterthought. Consider: Will customers pay for this? How much? How often? What's your gross margin? Can you acquire customers for less than their lifetime value? Without answers to these questions, you have a project, not a business.`;
+        function generateCompetitiveImprovements(idea, businessType, hasCompetitor) {
+            const improvements = [];
+            
+            if (businessType === 'manufacturing') {
+                improvements.push(`Research 5-10 material suppliers/manufacturers in your space. Compare: pricing, quality, production capacity, delivery times, sustainability claims. Where do they fall short? What do buyers complain about in reviews or industry forums?`);
+                improvements.push(`Build defensible moats for manufacturing: Proprietary production process, exclusive raw material sourcing, patents on materials/methods, long-term contracts with key buyers, or cost advantages through scale/efficiency.`);
+            } else if (businessType === 'software') {
+                improvements.push(`List ALL software alternatives: direct competitors, adjacent tools, even spreadsheets/manual processes. For each: features, pricing, user reviews (check G2, Capterra), market position. Find gaps - what do users wish these tools did?`);
+                improvements.push(`Technology alone isn't a moat. Build: Network effects (value grows with users), switching costs (hard to leave), proprietary data/AI, integrations that lock users in, or a brand synonymous with the category.`);
             } else {
-                return `<strong>Grade Reasoning:</strong> Your idea completely lacks revenue model considerations. There's no discussion of how you'll make money or whether customers will pay for this solution. <strong>Critical Issue:</strong> Even great products fail if they can't generate profitable revenue. You must identify who will pay, how much they'll pay, how you'll collect payment, and whether the economics work at scale. Start by understanding the economic value you create for customers and designing a model that captures a portion of that value.`;
+                improvements.push(`Identify how customers solve this problem TODAY - competitors, DIY solutions, or living with the problem. Why do they use those? What remains unsolved? Your opportunity is in their pain points with current options.`);
+                improvements.push(`Define your unique value proposition in one sentence: "Unlike [current solution], we [unique approach] so that [customer] can [specific outcome]." Test this with 20 potential customers - does it make them want to switch?`);
+            }
+            
+            improvements.push(`Identify your unfair advantage - something competitors can't copy: specialized expertise, unique partnerships, proprietary technology/IP, exclusive access to supply/distribution, or existing customer relationships.`);
+            
+            return improvements;
+        }
+
+        function generateRevenueAnalysis(idea, grade, hasSubscription, hasMetrics, businessType) {
+            if (grade === 'A' || grade === 'B') {
+                return `<strong>Revenue model ${grade === 'A' ? 'clear' : 'emerging'}.</strong> ${hasSubscription ? '✓ Subscription model = predictable recurring revenue.' : businessType === 'manufacturing' ? 'Manufacturing typically uses B2B contracts or per-unit pricing.' : businessType === 'ecommerce' ? 'Ecommerce revenue from product sales + potential subscriptions.' : 'Revenue approach needs definition.'} ${hasMetrics ? '✓ Financial metrics mentioned.' : '✗ No pricing/revenue numbers provided.'} <strong>Grade ${grade}:</strong> ${hasSubscription || hasMetrics ? 'Monetization considered' : 'Revenue direction exists'} but unit economics need validation.`;
+            } else {
+                return `<strong>Revenue model unclear.</strong> ${!hasSubscription && !hasMetrics ? '✗ No pricing, revenue streams, or financial projections mentioned.' : ''} For ${businessType}, typical models are ${businessType === 'manufacturing' ? 'B2B bulk orders, long-term supply contracts, or per-unit pricing' : businessType === 'software' ? 'subscriptions, usage-based, or freemium' : businessType === 'ecommerce' ? 'product margins, shipping fees, or subscriptions' : 'service fees, retainers, or project-based'}. <strong>Grade ${grade}:</strong> Can you acquire customers for less than their lifetime value? Prove it.`;
             }
         }
 
-        function getFeasibilityAnalysis(grade, hasTech, isDetailed, isVeryDetailed, idea) {
-            if (grade === 'B') {
-                return `<strong>Grade Reasoning:</strong> Your detailed technology-focused idea suggests thoughtful planning, though execution challenges remain. You've considered what needs to be built, which is important. <strong>Why this matters:</strong> Feasibility isn't just about technical capability - it's about whether you can execute with available resources, skills, and time. The key question is: can you build a working MVP in 3-6 months that proves the concept and starts generating learning from real customers?`;
-            } else if (grade === 'C') {
-                return `<strong>Grade Reasoning:</strong> Your idea's feasibility is uncertain based on the level of detail provided. It's unclear what resources, skills, timeline, or budget would be required to bring this to market. <strong>Why this matters:</strong> Many ideas fail in execution, not conception. You need to break this down into concrete steps with realistic resource requirements. Can you build an MVP yourself or with your team? If not, how will you find technical talent or funding? What can you launch in 6 months to start learning?`;
+        function generateRevenueImprovements(idea, businessType, hasSubscription, hasMetrics) {
+            const improvements = [];
+            
+            if (businessType === 'manufacturing') {
+                improvements.push(`Define B2B pricing model: Per-unit cost, minimum order quantities, volume discounts, long-term contract terms. Research competitor pricing. Calculate gross margins - aim for 40%+ to support sales/marketing costs.`);
+                improvements.push(`Calculate unit economics: Material costs, production costs, overhead, shipping. At what volume do you break even? What's the minimum order size that's profitable? Model scenarios at different price points.`);
+            } else if (hasSubscription) {
+                improvements.push(`Design subscription tiers (3-4 levels): Basic (core features, lower price), Pro (advanced features, mid price), Enterprise (custom solutions, premium price). Test pricing with 30+ prospects - what tier appeals most?`);
+                improvements.push(`Calculate SaaS metrics: MRR (Monthly Recurring Revenue), churn rate (target <5%/month), expansion revenue (upsells/cross-sells), CAC payback period (target <12 months), net revenue retention (aim for 100%+).`);
             } else {
-                return `<strong>Grade Reasoning:</strong> Your business idea lacks sufficient detail to assess feasibility, and there are significant concerns about whether this can be executed with realistic resources and timeline. <strong>Critical Issue:</strong> Ideas are worthless without execution. You need to honestly assess: Do you have the skills to build this? If not, can you find co-founders, hire talent, or outsource? What's the minimum you could launch to test the concept? How much capital is required? Break this into concrete milestones - if you can't articulate how to build version 1.0 in 6 months, the idea may not be feasible for you right now.`;
+                improvements.push(`Test pricing models: One-time purchase, subscription, usage-based (pay per use), freemium (free basic + paid premium), or hybrid. Interview customers about willingness-to-pay for each model.`);
+            }
+            
+            improvements.push(`Prove unit economics work: Calculate CAC (Customer Acquisition Cost), LTV (Lifetime Value), gross margin. Formula: LTV should be 3x+ CAC. If not, either raise prices, reduce costs, or improve retention.`);
+            improvements.push(`Build 3-year financial model: Monthly revenue projections, cost of goods sold, operating expenses, profit/loss. Include assumptions: customer growth rate, pricing, churn, CAC. Model best/worst case scenarios.`);
+            
+            return improvements;
+        }
+
+        function generateFeasibilityAnalysis(idea, grade, businessType, wordCount) {
+            if (businessType === 'manufacturing') {
+                return `<strong>Manufacturing feasibility challenges.</strong> Setting up production requires: factory/facility, specialized equipment, raw material sourcing, quality control, certifications/compliance, skilled labor. Your ${wordCount}-word plan ${wordCount > 40 ? 'provides some detail' : 'needs more specifics'} on HOW you'll manufacture. <strong>Grade ${grade}:</strong> ${grade === 'B' || grade === 'C' ? 'Feasible but capital-intensive' : 'Major execution complexity'} - can you start with contract manufacturing or small-scale production to validate?`;
+            } else if (businessType === 'software') {
+                return `<strong>Software development feasibility.</strong> Building an app/platform requires technical skills, 6-12 months development time, and $50-200k+ budget (or technical cofounder). Your ${wordCount}-word description ${wordCount > 40 ? 'shows planning' : 'lacks implementation detail'}. <strong>Grade ${grade}:</strong> Can you build an MVP in 3-6 months to test with real users before full build?`;
+            } else {
+                return `<strong>Implementation feasibility.</strong> Your ${wordCount}-word idea ${wordCount > 40 ? 'provides detail but' : 'needs more clarity on'} the path from concept to launch. <strong>Grade ${grade}:</strong> ${grade <= 'C' ? 'Major gaps in execution plan' : 'Feasible with right resources'} - what's your MVP that proves this works?`;
             }
         }
 
-        function getScalabilityAnalysis(grade, hasScale, hasTech, idea) {
-            if (grade === 'A') {
-                return `<strong>Grade Reasoning:</strong> Your idea demonstrates scalability awareness, particularly through technology or growth-oriented language. You've considered how this could expand beyond initial customers. <strong>Why this matters:</strong> Scalability means revenue can grow faster than costs - ideally 10x revenue growth requires only 2-3x cost growth. Technology businesses scale well because software can serve unlimited customers with minimal marginal cost. However, watch for hidden non-scalable elements like manual onboarding, custom implementations, or high-touch support.`;
-            } else if (grade === 'B') {
-                return `<strong>Grade Reasoning:</strong> Your idea has some scalability potential, especially if leveraging technology, but it's unclear how operations and revenue would scale efficiently. <strong>Why this matters:</strong> Many businesses can grow, but not all can scale profitably. The question isn't just 'can you get more customers?' but 'can you acquire and serve 10x more customers without 10x costs?' Identify your scaling bottlenecks now - what will break first as you grow? Customer onboarding? Support? Content creation? Fix these early.`;
+        function generateFeasibilityImprovements(idea, businessType) {
+            const improvements = [];
+            
+            if (businessType === 'manufacturing') {
+                improvements.push(`Start with contract manufacturing to validate demand before building your own factory. Find 2-3 contract manufacturers who can produce small batches (500-5,000 units). This reduces upfront capital risk massively.`);
+                improvements.push(`List ALL required resources: Production equipment ($X), facility rental ($X/month), raw materials suppliers (who?), quality certifications (which ones?), skilled workers (how many?). Get actual quotes from vendors.`);
+                improvements.push(`Create 12-month roadmap: Months 1-2 (source contract manufacturer, get samples made), 3-4 (beta test with 3-5 customers), 5-8 (iterate based on feedback, secure larger orders), 9-12 (decide on in-house production or continue outsourcing).`);
+            } else if (businessType === 'software') {
+                improvements.push(`Define MVP (Minimum Viable Product): What's the smallest feature set that tests your core hypothesis? Example: Basic search + booking only, no payments or reviews in V1. Cut everything non-essential. Build in 3-6 months max.`);
+                improvements.push(`Technical requirements: Frontend (React/Vue), Backend (Node/Python), Database (PostgreSQL), Hosting (AWS/Vercel), APIs needed. Do you have these skills? If not: technical cofounder (equity), hire ($100k+/year), outsource ($50-150/hr), or no-code (limited but faster).`);
             } else {
-                return `<strong>Grade Reasoning:</strong> Your business idea doesn't clearly demonstrate scalability - it's unclear how you'd efficiently grow revenue without proportional cost increases. <strong>Critical Issue:</strong> Without scalability, you may build a profitable small business but never achieve significant growth. Consider: Does your model have network effects? Can technology automate key functions? Can you expand to new markets without rebuilding everything? If growth requires linear increases in headcount or costs, you'll struggle to scale. Look for leverage through technology, platforms, or partnerships.`;
+                improvements.push(`Break launch into phases: Phase 1 (validate demand manually - 1-2 months, <$5k spend), Phase 2 (manual MVP with 10 beta customers - 2-3 months), Phase 3 (systematize and scale - 6+ months). Learn before you scale.`);
+            }
+            
+            improvements.push(`Identify top 5 execution risks: ${businessType === 'manufacturing' ? 'quality issues, supply chain delays, certification roadblocks, higher than expected costs, demand lower than projected' : businessType === 'software' ? 'technical delays, can\'t hire talent, MVP doesn\'t resonate, costs exceed budget, competition launches first' : 'can\'t acquire customers, execution takes longer than planned, costs higher than expected, team gaps, market not ready'}. For each, create mitigation plan.`);
+            improvements.push(`Validate with smallest possible test: ${businessType === 'manufacturing' ? 'Get 3 samples made, show to 10 potential buyers. Will they commit to orders?' : businessType === 'software' ? 'Build clickable prototype (no backend), show to 20 users. Do they understand it? Would they pay?' : 'Manually deliver the service to 5 beta customers. Can you fulfill well? Will they pay?'} Prove it works before scaling.`);
+            
+            return improvements;
+        }
+
+        function generateScalabilityAnalysis(idea, grade, businessType, hasSubscription) {
+            if (businessType === 'manufacturing') {
+                return `<strong>Manufacturing scalability.</strong> Scaling production means: increasing facility capacity, buying more equipment, hiring more workers, securing larger raw material volumes. Margins improve with scale but growth requires significant capital. ${hasSubscription ? 'Subscription model helps with predictable demand forecasting.' : ''} <strong>Grade ${grade}:</strong> ${grade >= 'B' ? 'Can scale but capital-intensive' : 'Linear scaling challenges'} - revenue grows slower than costs initially.`;
+            } else if (businessType === 'software') {
+                return `<strong>Excellent software scalability.</strong> Digital products can serve unlimited users with minimal marginal cost increase. ${hasSubscription ? 'Recurring revenue compounds as you grow.' : ''} Cloud infrastructure auto-scales. <strong>Grade ${grade}:</strong> Software scales very efficiently - serving 10x users might only need 2x costs (mostly support/sales, not infrastructure).`;
+            } else {
+                return `<strong>Scalability needs systemization.</strong> ${businessType === 'service' ? 'Service businesses scale slower since delivery requires people/time.' : 'Your model'} ${grade >= 'B' ? 'can grow but requires systems' : 'will struggle to scale without automation'}. <strong>Grade ${grade}:</strong> Can you serve 10x customers without 10x costs? Need to systemize operations.`;
             }
         }
 
-        function getRiskAnalysis(grade, isDetailed, isVeryDetailed, hasMarket, idea) {
-            if (grade === 'B') {
-                return `<strong>Grade Reasoning:</strong> Your detailed idea with market awareness suggests some risk mitigation thinking, though significant uncertainties remain. <strong>Why this matters:</strong> All businesses face risks - market (will customers buy?), execution (can you build it?), financial (will you run out of money?), and competitive (will someone do it better?). The difference between success and failure is often how well you identify and mitigate your riskiest assumptions early. The key is to validate your biggest risks cheaply before committing major resources.`;
-            } else if (grade === 'C') {
-                return `<strong>Grade Reasoning:</strong> Your business idea has moderate detail, suggesting some planning, but many risks remain unaddressed or unidentified. <strong>Why this matters:</strong> The biggest risks are often the ones you haven't identified. Common risks include: no market need, can't acquire customers profitably, execution delays, team gaps, regulatory changes, or competitive response. You need to systematically identify what could go wrong, how likely it is, and what you'll do about it. Build resilience through diversification, contingency planning, and maintaining adequate financial runway.`;
+        function generateScalabilityImprovements(idea, businessType) {
+            const improvements = [];
+            
+            if (businessType === 'manufacturing') {
+                improvements.push(`Plan production scaling: At what volume do you need your own facility vs contract manufacturing? Model costs at 10x, 50x, 100x current production. Economies of scale kick in, but when? At what volume does gross margin reach target 40-50%?`);
+                improvements.push(`Automate what you can: Inventory management systems, order processing, quality control monitoring, supplier ordering. Manufacturing has manual elements but systemize everything possible to reduce labor costs as you scale.`);
+            } else if (businessType === 'software') {
+                improvements.push(`Build on cloud infrastructure (AWS, Google Cloud, Vercel) from day one - auto-scaling handles traffic spikes. Use managed services for databases, authentication, payments. Design for 100x scale even with 100 users.`);
+                improvements.push(`Automate customer lifecycle: Onboarding (interactive guides), support (chatbot + knowledge base), billing (automated), analytics (dashboards). Every manual touchpoint is a bottleneck when you hit 1,000+ customers.`);
             } else {
-                return `<strong>Grade Reasoning:</strong> Your idea lacks sufficient detail to properly assess risks, which itself is a major risk factor. Limited planning suggests you may not have identified critical challenges and failure modes. <strong>Critical Issue:</strong> Startups fail when they run out of money before achieving product-market fit. Your biggest risks are likely: (1) No one will pay for this, (2) You can't acquire customers profitably, (3) You can't build/deliver the product, (4) You run out of cash. You must validate your riskiest assumptions first, before they become expensive mistakes. Start by testing whether customers will actually pay, not just whether you can build it.`;
+                improvements.push(`Systemize operations: Create SOPs (Standard Operating Procedures), templates, checklists, scripts for every repeated task. When you hire, new people should be productive in days, not weeks. Document everything now.`);
             }
+            
+            improvements.push(`Identify scaling bottlenecks before you hit them: ${businessType === 'manufacturing' ? 'Production capacity, raw material supply, quality control, shipping logistics' : businessType === 'software' ? 'Customer support, sales onboarding, infrastructure limits' : 'Delivery capacity, expert availability, operations complexity'}. Build solutions proactively - it's cheaper than fixing after breaking.`);
+            improvements.push(`Plan expansion strategy: ${businessType === 'manufacturing' ? 'Geographic expansion (new regions), product line expansion (new materials/products), customer segment expansion (new industries)' : businessType === 'software' ? 'Market expansion (new industries/geographies), product expansion (new features/modules), customer expansion (SMB → enterprise)' : 'Service expansion (new offerings), geographic expansion, customer tier expansion'}. Each should leverage existing strengths.`);
+            
+            return improvements;
+        }
+
+        function generateRiskAnalysis(idea, grade, businessType, hasProblem, hasMetrics, wordCount) {
+            const riskLevel = grade <= 'C' ? 'high' : grade === 'B' ? 'moderate' : 'manageable';
+            
+            return `<strong>${riskLevel.charAt(0).toUpperCase() + riskLevel.slice(1)} risk profile.</strong> Your ${wordCount}-word plan ${wordCount > 40 ? 'shows planning' : 'lacks detail'} on risk mitigation. ${hasProblem ? '✓ Problem identified' : '✗ Problem unclear'}, ${hasMetrics ? '✓ metrics mentioned' : '✗ no validation metrics'}. Main risks: ${businessType === 'manufacturing' ? 'High capital requirements, supply chain disruptions, quality issues, demand uncertainty' : businessType === 'software' ? 'Technical execution delays, competition, user adoption, funding needs' : 'Customer acquisition costs too high, can\'t deliver profitably, market not ready'}. <strong>Grade ${grade}:</strong> ${grade <= 'C' ? 'Many unaddressed risks - need systematic identification and mitigation' : 'Some risk planning but needs deeper contingency plans'}.`;
+        }
+
+        function generateRiskImprovements(idea, businessType, hasProblem) {
+            const improvements = [];
+            
+            improvements.push(`Create risk register for ${businessType}: Market risks (${businessType === 'manufacturing' ? 'demand lower than expected, customers don\'t switch from current suppliers' : businessType === 'software' ? 'users don\'t adopt, competitors copy features' : 'customers won\'t pay enough to be profitable'}), Execution risks (${businessType === 'manufacturing' ? 'production delays, quality issues, supplier problems' : businessType === 'software' ? 'technical delays, can\'t find developers, bugs/downtime' : 'can\'t hire right people, operations break'}), Financial risks (run out of money, costs higher than projected). Rate each: likelihood (low/med/high) × impact (low/med/high).`);
+            
+            if (businessType === 'manufacturing') {
+                improvements.push(`Test your RISKIEST assumption first: "Will customers actually buy?" Get 3-5 samples made, show to 20 potential buyers. Can you get 3-5 letters of intent (LOIs) or pre-orders? This validates demand before you invest $100k+ in production setup.`);
+                improvements.push(`Supply chain resilience: Identify 2-3 backup suppliers for critical raw materials. Don't depend on one source. Have contracts that protect you from price spikes. Build 2-3 months inventory buffer for essential inputs.`);
+            } else if (businessType === 'software') {
+                improvements.push(`Test your RISKIEST assumption first: "Will users pay for this?" Build a simple landing page explaining the product, run $500-1,000 in ads, measure signups. Can you get 100+ email signups at <$10 each? This proves demand before building.`);
+                improvements.push(`Technical risk mitigation: Use proven technology stacks, not bleeding-edge. Have 2 developers minimum (bus factor protection). Use managed services to reduce complexity. Build with modular architecture so one bug doesn't crash everything.`);
+            } else {
+                improvements.push(`Test your RISKIEST assumption first: "Will customers pay enough to be profitable?" Manually deliver to 5-10 customers. Track: time spent, cost to deliver, what they'll pay. If CAC + delivery cost > what they pay, the model is broken - pivot before scaling.`);
+            }
+            
+            improvements.push(`Financial resilience: Maintain 12-18 months runway (cash ÷ monthly burn). Know your key metrics: runway, monthly burn rate, revenue growth rate. When runway hits 6 months, either raise money or cut costs drastically - don't wait until 2 months.`);
+            improvements.push(`Build contingency plans for top 3 risks. For each: Early warning indicators (how do you detect it early?), prevention strategy (how do you reduce likelihood?), response plan (what do you do if it happens?). Example: If demand is weak (detected by low conversion rates), prevention = better customer research upfront, response = pivot to different customer segment.`);
+            
+            return improvements;
         }
 
         function displayResults(analysis) {
-            currentAnalysis = analysis; // Store for detail view
             const results = document.getElementById('results');
             
             const overallGradeClass = `grade-${analysis.overallGrade}`;
@@ -825,11 +885,10 @@
                         </div>
                         <p class="category-analysis">${category.analysis}</p>
                         <div class="improvements">
-                            <h4>Steps to Improve</h4>
+                            <h4>Specific Improvements for Your Idea</h4>
                             <ul>
-                                ${category.improvements.slice(0, 2).map(imp => `<li>${imp}</li>`).join('')}
+                                ${category.improvements.map(imp => `<li>${imp}</li>`).join('')}
                             </ul>
-                            <button class="view-details-btn" onclick="showDetailPage()">View Full Improvement Plan →</button>
                         </div>
                     </div>
                 `;
@@ -837,45 +896,6 @@
 
             results.innerHTML = html;
             results.classList.add('active');
-        }
-
-        function showDetailPage() {
-            if (!currentAnalysis) return;
-            
-            const detailPage = document.getElementById('improvementDetailPage');
-            const detailContent = document.getElementById('detailContent');
-            
-            let html = '';
-            
-            currentAnalysis.categories.forEach(category => {
-                const gradeClass = `grade-${category.grade}`;
-                html += `
-                    <div class="detail-section">
-                        <div class="detail-section-header">
-                            <h3 class="detail-section-title">${category.name}</h3>
-                            <span class="detail-section-grade ${gradeClass}">${category.grade}</span>
-                        </div>
-                        <p style="color: var(--text-muted); line-height: 1.7; margin-bottom: 2rem;">${category.analysis}</p>
-                        
-                        ${category.improvements.map((improvement, index) => `
-                            <div class="improvement-step">
-                                <h4>Step ${index + 1}</h4>
-                                <p>${improvement}</p>
-                            </div>
-                        `).join('')}
-                    </div>
-                `;
-            });
-            
-            detailContent.innerHTML = html;
-            detailPage.classList.add('active');
-            document.body.style.overflow = 'hidden'; // Prevent background scrolling
-        }
-
-        function closeDetailPage() {
-            const detailPage = document.getElementById('improvementDetailPage');
-            detailPage.classList.remove('active');
-            document.body.style.overflow = 'auto'; // Re-enable scrolling
         }
     </script>
 </body>
