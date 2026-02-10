@@ -639,15 +639,17 @@
             const hasTech = ideaLower.includes('app') || ideaLower.includes('platform') || ideaLower.includes('software') || ideaLower.includes('ai');
             const hasRevenue = ideaLower.includes('subscription') || ideaLower.includes('revenue') || ideaLower.includes('price') || ideaLower.includes('sell');
             const hasScale = ideaLower.includes('scale') || ideaLower.includes('grow') || ideaLower.includes('expand');
+            const hasCompetition = ideaLower.includes('competitor') || ideaLower.includes('unique') || ideaLower.includes('different');
             const isDetailed = wordCount > 20;
+            const isVeryDetailed = wordCount > 40;
             
             // Calculate grades based on indicators
-            const marketGrade = hasMarket && isDetailed ? 'A' : hasMarket ? 'B' : 'C';
-            const competitiveGrade = hasTech ? 'B' : 'C';
-            const revenueGrade = hasRevenue ? 'A' : 'B';
-            const feasibilityGrade = hasTech ? 'B' : isDetailed ? 'B' : 'C';
-            const scalabilityGrade = hasScale || hasTech ? 'A' : 'B';
-            const riskGrade = isDetailed ? 'B' : 'C';
+            const marketGrade = hasMarket && isDetailed ? 'A' : hasMarket ? 'B' : isDetailed ? 'C' : 'D';
+            const competitiveGrade = hasCompetition && hasTech ? 'A' : hasTech ? 'B' : hasCompetition ? 'C' : 'D';
+            const revenueGrade = hasRevenue && isDetailed ? 'A' : hasRevenue ? 'B' : 'C';
+            const feasibilityGrade = hasTech && isVeryDetailed ? 'B' : hasTech ? 'C' : isDetailed ? 'C' : 'D';
+            const scalabilityGrade = hasScale && hasTech ? 'A' : hasScale || hasTech ? 'B' : 'C';
+            const riskGrade = isVeryDetailed && hasMarket ? 'B' : isDetailed ? 'C' : 'D';
             
             // Calculate overall grade
             const grades = [marketGrade, competitiveGrade, revenueGrade, feasibilityGrade, scalabilityGrade, riskGrade];
@@ -661,75 +663,143 @@
                     {
                         name: "Market Opportunity",
                         grade: marketGrade,
-                        analysis: hasMarket 
-                            ? "Your idea targets a clear market with identifiable customers and demand indicators."
-                            : "Consider specifying your target market and demonstrating customer demand more clearly.",
+                        analysis: getMarketAnalysis(marketGrade, hasMarket, isDetailed, idea),
                         improvements: [
-                            "Conduct customer interviews with at least 20 potential users to validate demand",
-                            "Research market size using industry reports and competitor analysis",
-                            "Create detailed buyer personas including demographics, pain points, and purchasing behavior"
+                            "Conduct in-depth customer discovery interviews with 20-30 potential users across different demographics. Use open-ended questions to understand their pain points, current solutions, willingness to pay, and decision-making process. Document all findings in a structured format.",
+                            "Perform comprehensive market sizing using both top-down (TAM/SAM/SOM framework) and bottom-up approaches. Research industry reports from sources like Gartner, McKinsey, and IBISWorld. Calculate your realistic market share based on competitive landscape and go-to-market strategy.",
+                            "Create 3-5 detailed buyer personas including demographics (age, income, location, job title), psychographics (values, motivations, fears), behavioral patterns (how they currently solve the problem), and buying triggers (what would make them switch to your solution).",
+                            "Analyze market trends and timing - is the market growing or shrinking? Are there regulatory changes, technological shifts, or cultural movements that make now the right time? Identify early adopter segments who have the highest pain and urgency.",
+                            "Map out the entire customer journey from awareness to purchase to retention. Identify all touchpoints, potential friction points, and opportunities to create value. Understand what channels your target customers use and trust."
                         ]
                     },
                     {
                         name: "Competitive Advantage",
                         grade: competitiveGrade,
-                        analysis: hasTech
-                            ? "Technology-based solutions can provide differentiation, but require strong execution."
-                            : "Focus on what makes your solution unique compared to existing alternatives.",
+                        analysis: getCompetitiveAnalysis(competitiveGrade, hasCompetition, hasTech, idea),
                         improvements: [
-                            "Identify 3-5 direct competitors and analyze their strengths and weaknesses",
-                            "Develop a unique value proposition that addresses unmet customer needs",
-                            "Consider building proprietary technology or processes that are difficult to replicate"
+                            "Conduct thorough competitive analysis of 5-10 direct and indirect competitors. Create a detailed comparison matrix covering features, pricing, target market, strengths, weaknesses, market share, and customer satisfaction. Identify gaps in their offerings.",
+                            "Develop a clear unique value proposition (UVP) that articulates exactly why customers should choose you over alternatives. Focus on outcomes, not features. Test your UVP with target customers to ensure it resonates and is perceived as meaningfully different.",
+                            "Build defensible moats such as proprietary technology, exclusive partnerships, network effects, brand reputation, or switching costs. Consider what would prevent a well-funded competitor from copying your idea in 6-12 months.",
+                            "Identify and leverage unfair advantages you possess - specialized expertise, unique access to customers or distribution, proprietary data, or existing relationships. These are advantages competitors can't easily replicate.",
+                            "Continuously innovate and stay ahead by establishing a product roadmap that keeps you 12-18 months ahead of competition. Build a culture of customer feedback and rapid iteration to maintain your edge."
                         ]
                     },
                     {
                         name: "Revenue Model",
                         grade: revenueGrade,
-                        analysis: hasRevenue
-                            ? "You've considered monetization, which is essential for business sustainability."
-                            : "Define clear revenue streams and pricing strategy to ensure profitability.",
+                        analysis: getRevenueAnalysis(revenueGrade, hasRevenue, isDetailed, idea),
                         improvements: [
-                            "Test multiple pricing models with early customers to find optimal price points",
-                            "Calculate unit economics including customer acquisition cost and lifetime value",
-                            "Explore multiple revenue streams to reduce dependency on single source"
+                            "Test multiple pricing models and strategies - consider subscription, freemium, usage-based, tiered pricing, enterprise licensing, marketplace commission, or hybrid models. Run pricing experiments with early customers to optimize for both conversion and revenue.",
+                            "Calculate detailed unit economics including Customer Acquisition Cost (CAC), Lifetime Value (LTV), gross margins, and payback period. Ensure LTV:CAC ratio is at least 3:1 and payback period is under 12 months for sustainable growth.",
+                            "Develop multiple revenue streams to reduce risk and increase value per customer. Consider core product sales, premium features, professional services, training, API access, white-label licensing, or complementary products.",
+                            "Create a financial model projecting 3-5 year revenue, costs, and profitability under different scenarios (conservative, realistic, optimistic). Include assumptions about pricing, conversion rates, churn, growth rate, and customer acquisition strategy.",
+                            "Research willingness-to-pay through customer interviews and competitive benchmarking. Understand the economic value you create for customers and price to capture a fair portion of that value. Consider value-based pricing rather than cost-plus."
                         ]
                     },
                     {
                         name: "Feasibility",
                         grade: feasibilityGrade,
-                        analysis: isDetailed
-                            ? "Your detailed description suggests thoughtful planning, but execution challenges remain."
-                            : "Break down implementation into concrete steps with resource requirements.",
+                        analysis: getFeasibilityAnalysis(feasibilityGrade, hasTech, isDetailed, isVeryDetailed, idea),
                         improvements: [
-                            "Create a minimum viable product (MVP) that can be built in 3-6 months",
-                            "Identify critical skills and resources needed and plan how to acquire them",
-                            "Start with a pilot program or beta test to validate feasibility before full launch"
+                            "Break down your vision into a minimal viable product (MVP) that can be built in 3-6 months with limited resources. Focus on the core value proposition and cut everything else. Identify what you can launch with to start learning from real customers.",
+                            "Create a detailed resource plan identifying all required skills (technical, business, marketing), tools, infrastructure, partnerships, and capital. For each requirement, specify whether you'll build in-house, hire, outsource, or partner.",
+                            "Develop a realistic 12-month roadmap with specific milestones, deliverables, and success metrics. Include product development phases, customer acquisition goals, revenue targets, and key learning objectives. Build in buffer time for unexpected challenges.",
+                            "Identify and mitigate critical risks that could derail execution - technical challenges, regulatory hurdles, dependency on third parties, team gaps, or funding shortfalls. Create contingency plans for your top 5 risks.",
+                            "Start with a pilot program or beta test with 10-20 early customers to validate feasibility before full launch. Use this phase to refine the product, test operations, gather testimonials, and prove the business model works at small scale."
                         ]
                     },
                     {
                         name: "Scalability",
                         grade: scalabilityGrade,
-                        analysis: hasScale || hasTech
-                            ? "The business model shows potential for growth beyond initial market."
-                            : "Consider how operations and revenue can grow without proportional cost increases.",
+                        analysis: getScalabilityAnalysis(scalabilityGrade, hasScale, hasTech, idea),
                         improvements: [
-                            "Design systems and processes that can handle 10x growth without complete rebuilding",
-                            "Identify key bottlenecks in scaling and create solutions proactively",
-                            "Build partnerships or distribution channels that enable rapid market expansion"
+                            "Design your technology, operations, and processes to handle 10x growth without fundamental rebuilding. Use cloud infrastructure, automation, and scalable architectures from day one. Avoid custom solutions that will break at scale.",
+                            "Identify scaling bottlenecks early - customer onboarding, support, content creation, manual processes, or key person dependencies. Create playbooks and systems to systematize these functions before they become constraints.",
+                            "Build strategic partnerships for distribution, technology, or operations that enable rapid scaling. Look for channels that give you access to large customer bases without proportional increases in your team or costs.",
+                            "Develop a hiring and team scaling plan that outlines roles needed at different growth stages. Create standard operating procedures and training programs so new team members can quickly become productive as you grow.",
+                            "Plan your go-to-market expansion strategy - will you scale geographically, by customer segment, or by product line? Sequence your expansion to learn and build momentum, starting with beachhead markets where you can dominate before expanding."
                         ]
                     },
                     {
                         name: "Risk Assessment",
                         grade: riskGrade,
-                        analysis: "Every business faces risks including market, financial, operational, and competitive challenges.",
+                        analysis: getRiskAnalysis(riskGrade, isDetailed, isVeryDetailed, hasMarket, idea),
                         improvements: [
-                            "Create contingency plans for top 5 risks including market rejection and funding gaps",
-                            "Diversify early to avoid single points of failure in customers, suppliers, or team",
-                            "Build financial runway of at least 12-18 months to weather unexpected challenges"
+                            "Create a comprehensive risk register identifying market risks (demand doesn't materialize, competitors respond aggressively), execution risks (product delays, team issues), financial risks (running out of cash), and external risks (regulatory changes, economic downturns). Rate each by likelihood and impact.",
+                            "Develop detailed contingency plans for your top 5 risks. For each risk, define early warning indicators, mitigation strategies, and response plans. Assign owners responsible for monitoring and responding to each risk category.",
+                            "Build financial resilience by maintaining 12-18 months of runway at all times. Diversify funding sources, manage burn rate carefully, and have backup plans if primary revenue channels underperform. Know your minimum viable revenue to keep operating.",
+                            "Avoid single points of failure in your business - don't depend on one customer for majority of revenue, one supplier for critical inputs, one team member for essential functions, or one channel for all customer acquisition. Build redundancy and optionality.",
+                            "Validate your riskiest assumptions early and cheaply before committing major resources. Use experiments, pilots, and prototypes to test whether customers will actually pay, if you can deliver at acceptable cost, and if unit economics work at scale."
                         ]
                     }
                 ]
             };
+        }
+
+        function getMarketAnalysis(grade, hasMarket, isDetailed, idea) {
+            if (grade === 'A') {
+                return `<strong>Grade Reasoning:</strong> Your business idea demonstrates strong market awareness by clearly identifying target customers and market demand. You've articulated who will use this solution and why there's a need for it. The level of detail suggests you've thought about market dynamics. <strong>Why this matters:</strong> Ideas that clearly define their market and demonstrate understanding of customer needs are 3x more likely to achieve product-market fit. However, claiming there's demand is different from proving it - you'll need to validate with real customer conversations and data.`;
+            } else if (grade === 'B') {
+                return `<strong>Grade Reasoning:</strong> Your idea shows some market consideration, but lacks depth in articulating the specific target customer and their pain points. You mention market opportunity, but don't provide enough detail about market size, customer segments, or competitive dynamics. <strong>Why this matters:</strong> 42% of startups fail due to 'no market need' - not because the product is bad, but because they didn't truly understand their customer. You need to deeply understand who specifically will pay for this and why their need is urgent enough to change behavior.`;
+            } else if (grade === 'C') {
+                return `<strong>Grade Reasoning:</strong> Your business idea doesn't clearly identify the target market or demonstrate understanding of customer needs. While you may have a product vision, it's unclear who will buy this, why they need it, or how large the opportunity is. <strong>Why this matters:</strong> Without a well-defined market, you're building a solution in search of a problem. This is the #1 cause of startup failure. Before building anything, you need to identify a specific customer segment with a painful problem they're actively trying to solve and willing to pay for a better solution.`;
+            } else {
+                return `<strong>Grade Reasoning:</strong> Your idea lacks clear market definition and doesn't articulate customer needs or demand. It's a product concept without evidence of market opportunity. <strong>Critical Issue:</strong> You need to shift from product-thinking to market-thinking. Start by identifying a specific group of people with a painful, expensive problem they're actively trying to solve. Research their current solutions, willingness to pay, and what would make them switch. Market validation must come before product development.`;
+            }
+        }
+
+        function getCompetitiveAnalysis(grade, hasCompetition, hasTech, idea) {
+            if (grade === 'A') {
+                return `<strong>Grade Reasoning:</strong> Your idea articulates clear differentiation and leverages technology or unique approaches that could provide competitive advantages. You've thought about what makes this different from existing solutions. <strong>Why this matters:</strong> In competitive markets, clear differentiation is essential. However, be aware that competitors can copy features quickly. Your real competitive advantage will come from execution, customer relationships, brand, and compounding advantages like network effects or proprietary data.`;
+            } else if (grade === 'B') {
+                return `<strong>Grade Reasoning:</strong> Your idea has some differentiating factors, particularly if it leverages technology, but the competitive advantage isn't clearly articulated or defensible. <strong>Why this matters:</strong> Technology alone isn't a moat - competitors can copy it. You need to identify sustainable competitive advantages like network effects, switching costs, brand, proprietary data, or exclusive partnerships. Consider what will keep customers with you and prevent new entrants from winning market share.`;
+            } else if (grade === 'C') {
+                return `<strong>Grade Reasoning:</strong> Your business idea doesn't clearly articulate what makes it different from existing solutions or how you'll compete. This suggests you haven't thoroughly researched the competitive landscape or identified your unique value proposition. <strong>Critical Issue:</strong> Every market has competition, even if indirect. Customers are already solving this problem somehow - even if it's with spreadsheets or manual processes. You need to understand exactly why a customer would choose your solution over what they're doing today, and what makes your approach defensible over time.`;
+            } else {
+                return `<strong>Grade Reasoning:</strong> Your idea lacks any clear competitive differentiation or unique value proposition. Without understanding what makes you different, you'll struggle to acquire customers and may face commoditization. <strong>Critical Issue:</strong> You must thoroughly research all competitors (direct and indirect) and identify a defensible position. This could be serving a different customer segment, having superior technology, offering better service, or creating a different business model. Simply being 'better' or 'cheaper' is rarely enough.`;
+            }
+        }
+
+        function getRevenueAnalysis(grade, hasRevenue, isDetailed, idea) {
+            if (grade === 'A') {
+                return `<strong>Grade Reasoning:</strong> Your idea includes consideration of monetization strategy and revenue generation, showing business model awareness. You've thought beyond just the product to how you'll make money. <strong>Why this matters:</strong> Having a revenue model is critical, but the real test is unit economics - will customer lifetime value exceed acquisition costs by at least 3x? You'll need to validate pricing, conversion rates, and retention through real customer interactions before scaling.`;
+            } else if (grade === 'B') {
+                return `<strong>Grade Reasoning:</strong> Your idea mentions revenue or monetization, but lacks detail on the business model, pricing strategy, or economic viability. <strong>Why this matters:</strong> Many businesses fail not because they can't get customers, but because they can't acquire them profitably or monetize them effectively. You need a clear path to profitability with validated pricing that customers will actually pay, not just what you hope they'll pay.`;
+            } else if (grade === 'C') {
+                return `<strong>Grade Reasoning:</strong> Your business idea doesn't articulate a clear revenue model or monetization strategy. It's unclear how you'll make money, what customers will pay, or whether the business can be profitable. <strong>Critical Issue:</strong> Revenue model should be designed from day one, not as an afterthought. Consider: Will customers pay for this? How much? How often? What's your gross margin? Can you acquire customers for less than their lifetime value? Without answers to these questions, you have a project, not a business.`;
+            } else {
+                return `<strong>Grade Reasoning:</strong> Your idea completely lacks revenue model considerations. There's no discussion of how you'll make money or whether customers will pay for this solution. <strong>Critical Issue:</strong> Even great products fail if they can't generate profitable revenue. You must identify who will pay, how much they'll pay, how you'll collect payment, and whether the economics work at scale. Start by understanding the economic value you create for customers and designing a model that captures a portion of that value.`;
+            }
+        }
+
+        function getFeasibilityAnalysis(grade, hasTech, isDetailed, isVeryDetailed, idea) {
+            if (grade === 'B') {
+                return `<strong>Grade Reasoning:</strong> Your detailed technology-focused idea suggests thoughtful planning, though execution challenges remain. You've considered what needs to be built, which is important. <strong>Why this matters:</strong> Feasibility isn't just about technical capability - it's about whether you can execute with available resources, skills, and time. The key question is: can you build a working MVP in 3-6 months that proves the concept and starts generating learning from real customers?`;
+            } else if (grade === 'C') {
+                return `<strong>Grade Reasoning:</strong> Your idea's feasibility is uncertain based on the level of detail provided. It's unclear what resources, skills, timeline, or budget would be required to bring this to market. <strong>Why this matters:</strong> Many ideas fail in execution, not conception. You need to break this down into concrete steps with realistic resource requirements. Can you build an MVP yourself or with your team? If not, how will you find technical talent or funding? What can you launch in 6 months to start learning?`;
+            } else {
+                return `<strong>Grade Reasoning:</strong> Your business idea lacks sufficient detail to assess feasibility, and there are significant concerns about whether this can be executed with realistic resources and timeline. <strong>Critical Issue:</strong> Ideas are worthless without execution. You need to honestly assess: Do you have the skills to build this? If not, can you find co-founders, hire talent, or outsource? What's the minimum you could launch to test the concept? How much capital is required? Break this into concrete milestones - if you can't articulate how to build version 1.0 in 6 months, the idea may not be feasible for you right now.`;
+            }
+        }
+
+        function getScalabilityAnalysis(grade, hasScale, hasTech, idea) {
+            if (grade === 'A') {
+                return `<strong>Grade Reasoning:</strong> Your idea demonstrates scalability awareness, particularly through technology or growth-oriented language. You've considered how this could expand beyond initial customers. <strong>Why this matters:</strong> Scalability means revenue can grow faster than costs - ideally 10x revenue growth requires only 2-3x cost growth. Technology businesses scale well because software can serve unlimited customers with minimal marginal cost. However, watch for hidden non-scalable elements like manual onboarding, custom implementations, or high-touch support.`;
+            } else if (grade === 'B') {
+                return `<strong>Grade Reasoning:</strong> Your idea has some scalability potential, especially if leveraging technology, but it's unclear how operations and revenue would scale efficiently. <strong>Why this matters:</strong> Many businesses can grow, but not all can scale profitably. The question isn't just 'can you get more customers?' but 'can you acquire and serve 10x more customers without 10x costs?' Identify your scaling bottlenecks now - what will break first as you grow? Customer onboarding? Support? Content creation? Fix these early.`;
+            } else {
+                return `<strong>Grade Reasoning:</strong> Your business idea doesn't clearly demonstrate scalability - it's unclear how you'd efficiently grow revenue without proportional cost increases. <strong>Critical Issue:</strong> Without scalability, you may build a profitable small business but never achieve significant growth. Consider: Does your model have network effects? Can technology automate key functions? Can you expand to new markets without rebuilding everything? If growth requires linear increases in headcount or costs, you'll struggle to scale. Look for leverage through technology, platforms, or partnerships.`;
+            }
+        }
+
+        function getRiskAnalysis(grade, isDetailed, isVeryDetailed, hasMarket, idea) {
+            if (grade === 'B') {
+                return `<strong>Grade Reasoning:</strong> Your detailed idea with market awareness suggests some risk mitigation thinking, though significant uncertainties remain. <strong>Why this matters:</strong> All businesses face risks - market (will customers buy?), execution (can you build it?), financial (will you run out of money?), and competitive (will someone do it better?). The difference between success and failure is often how well you identify and mitigate your riskiest assumptions early. The key is to validate your biggest risks cheaply before committing major resources.`;
+            } else if (grade === 'C') {
+                return `<strong>Grade Reasoning:</strong> Your business idea has moderate detail, suggesting some planning, but many risks remain unaddressed or unidentified. <strong>Why this matters:</strong> The biggest risks are often the ones you haven't identified. Common risks include: no market need, can't acquire customers profitably, execution delays, team gaps, regulatory changes, or competitive response. You need to systematically identify what could go wrong, how likely it is, and what you'll do about it. Build resilience through diversification, contingency planning, and maintaining adequate financial runway.`;
+            } else {
+                return `<strong>Grade Reasoning:</strong> Your idea lacks sufficient detail to properly assess risks, which itself is a major risk factor. Limited planning suggests you may not have identified critical challenges and failure modes. <strong>Critical Issue:</strong> Startups fail when they run out of money before achieving product-market fit. Your biggest risks are likely: (1) No one will pay for this, (2) You can't acquire customers profitably, (3) You can't build/deliver the product, (4) You run out of cash. You must validate your riskiest assumptions first, before they become expensive mistakes. Start by testing whether customers will actually pay, not just whether you can build it.`;
+            }
         }
 
         function displayResults(analysis) {
